@@ -2,10 +2,7 @@ package com.example.tcp;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -33,11 +30,13 @@ public class TcpServer {
                 System.out.println("서버 : 클라이언트로 인사 출력");
                 p.flush();//버퍼의 데이터르 한 번에 쏟아냄.
 
+                InputStream create = s.getInputStream();
+
                 s.close();
                 System.out.println("[서버 : "
-                + s.getInetAddress().getHostAddress()
-                + "클라이언트와의 연결 해제]");
-                if (cnt>5) {
+                        + s.getInetAddress().getHostAddress()
+                        + "클라이언트와의 연결 해제]");
+                if (cnt > 5) {
                     ss.close();
                     System.out.println("서버 종료");
                 }
@@ -46,6 +45,21 @@ public class TcpServer {
         } catch (IOException error) {
             error.printStackTrace();//에러 원인 확인
         }
-    }
 
+//        String path = "C:\\Program Files\\새폴더";
+//        File Folder = new File(path);
+//
+//        if (!Folder.exists()) {
+//            try {
+//                Folder.mkdir();
+//                System.out.println("폴더 생성");
+//            }
+//            catch (Exception exception) {
+//                exception.getStackTrace();
+//            }
+//        } else {
+//            System.out.println("이미 폴더가 존재합니다.");
+//        }
+//    }
+    }
 }
