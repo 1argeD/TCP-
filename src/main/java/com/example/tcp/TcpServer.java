@@ -58,37 +58,4 @@ public class TcpServer {
             error.printStackTrace();//에러 원인 확인
         }
     }
-
-
-    public static void update(String[] args) {
-        try {
-            ServerSocket ss = new ServerSocket(50000);
-            System.out.println("50000포트 실행");
-
-            int cnt = 0;
-            while(true) {
-                Socket s = ss.accept();
-                System.out.println("서버와 클라이언트 연결");
-
-                OutputStream update = s.getOutputStream();
-                PrintStream ud = new PrintStream(update);
-                ud.println("수정된 폴더");
-                System.out.println("폴더 수정 완료");
-                ud.flush();
-
-                s.close();
-                System.out.println("[서버"
-                        +s.getInetAddress().getHostAddress()
-                        +"클라이언트와 연결 헤제]");
-                if(cnt > 5) {
-                    ss.close();
-                    System.out.println("서버 종료");
-                }
-                cnt ++;
-            }
-
-        } catch (Exception error) {
-            error.printStackTrace();;
-        }
-    }
 }
