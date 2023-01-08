@@ -1,6 +1,8 @@
 package com.example.tcp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -22,7 +24,7 @@ public class TcpServer {
 
                 InputStream is = s.getInputStream();
                 Scanner sc = new Scanner(is); // 2byte 처리
-                System.out.println("[====서버로부터 받은 인삿말 : " + sc.nextLine() + "====]");
+                System.out.println("[====클라이언트로부터 받은 인삿말 : " + sc.nextLine() + "====]");
 
                 OutputStream o = s.getOutputStream();
                 PrintStream p = new PrintStream(o);
@@ -30,7 +32,17 @@ public class TcpServer {
                 System.out.println("서버 : 클라이언트로 인사 출력");
                 p.flush();//버퍼의 데이터르 한 번에 쏟아냄.
 
-                InputStream create = s.getInputStream();
+                OutputStream create = s.getOutputStream();
+                PrintStream cr = new PrintStream(create);
+                cr.println("대충 생성 폴더");
+                System.out.println("폴더 생성");
+                cr.flush();
+
+                OutputStream update = s.getOutputStream();
+                PrintStream up = new PrintStream(update);
+                up.println("수정된 폴더");
+                System.out.println("폴더 수정");
+                up.flush();
 
                 s.close();
                 System.out.println("[서버 : "
@@ -45,21 +57,38 @@ public class TcpServer {
         } catch (IOException error) {
             error.printStackTrace();//에러 원인 확인
         }
+    }
 
-//        String path = "C:\\Program Files\\새폴더";
-//        File Folder = new File(path);
-//
-//        if (!Folder.exists()) {
-//            try {
-//                Folder.mkdir();
-//                System.out.println("폴더 생성");
-//            }
-//            catch (Exception exception) {
-//                exception.getStackTrace();
-//            }
-//        } else {
-//            System.out.println("이미 폴더가 존재합니다.");
-//        }
-//    }
+
+    public static void update(String[] args) {
+        try {
+            ServerSocket ss = new ServerSocket(50000);
+            System.out.println("50000포트 실행");
+
+            int cnt = 0;
+            while(true) {
+                Socket s = ss.accept();
+                System.out.println("서버와 클라이언트 연결");
+
+                OutputStream update = s.getOutputStream();
+                PrintStream ud = new PrintStream(update);
+                ud.println("수정된 폴더");
+                System.out.println("폴더 수정 완료");
+                ud.flush();
+
+                s.close();
+                System.out.println("[서버"
+                        +s.getInetAddress().getHostAddress()
+                        +"클라이언트와 연결 헤제]");
+                if(cnt > 5) {
+                    ss.close();
+                    System.out.println("서버 종료");
+                }
+                cnt ++;
+            }
+
+        } catch (Exception error) {
+            error.printStackTrace();;
+        }
     }
 }
